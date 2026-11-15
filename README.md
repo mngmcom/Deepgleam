@@ -3,6 +3,8 @@
 Ein kleines Side-Scrolling-Jump-and-Run im Pixel-Look, das direkt im Browser läuft.
 Ein Abenteurer erkundet mit seiner Laterne eine dunkle Höhle und sucht einen verlorenen Goldschatz.
 
+![Screenshot: Der Abenteurer mit Laterne in den Höhlenruinen, daneben eine Wandfackel, ein Edelstein und zwei Spinnen](docs/screenshot.png)
+
 ## Starten
 
 `index.html` im Browser öffnen. Es braucht weder einen Server noch einen Build-Schritt oder Abhängigkeiten.
