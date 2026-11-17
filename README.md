@@ -1,5 +1,7 @@
 # Deepgleam
 
+### ▶ [Hier spielen](https://mngmcom.github.io/Deepgleam/)
+
 Ein kleines Side-Scrolling-Jump-and-Run im Pixel-Look, das direkt im Browser läuft.
 Ein Abenteurer erkundet mit seiner Laterne vier dunkle Höhlen und sucht einen verlorenen Goldschatz.
 
