@@ -2,6 +2,8 @@
 
 ### ▶ [Hier spielen](https://mngmcom.github.io/Deepgleam/)
 
+Oder [als ZIP herunterladen](https://github.com/mngmcom/Deepgleam/releases/latest), entpacken und `index.html` im Browser öffnen.
+
 Ein kleines Side-Scrolling-Jump-and-Run im Pixel-Look, das direkt im Browser läuft.
 Ein Abenteurer erkundet mit seiner Laterne vier dunkle Höhlen und sucht einen verlorenen Goldschatz.
 
@@ -57,6 +59,7 @@ Jedes Level hat eine eigene Farbwelt und ein eigenes Monster. Die ersten drei en
 | `index.html` | Seite mit dem Canvas, skaliert pixelgenau auf die Fenstergröße |
 | `level.js` | Leveldaten als Text: Name, Farbwelt und Abschnitte je Level |
 | `game.js` | Spiellogik, Grafik, Licht und Sound |
+| `.github/workflows/release.yml` | baut bei jedem Push auf `main` eine Release mit ZIP-Download, bei Pull Requests nur eine Test-ZIP |
 
 Technik: reines JavaScript mit HTML5 Canvas, interne Auflösung 320×180 Pixel bei 16×16-Kacheln. Alle Grafiken und Soundeffekte werden im Code erzeugt (Pixel-Sprites aus Zeichenketten, Töne über die Web Audio API).
 
