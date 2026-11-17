@@ -92,3 +92,7 @@ Ein neues Level ist einfach ein weiterer Eintrag in `LEVELS`. Die Spielfigur spr
 Spielgefühl und Schwierigkeit lassen sich über die Konstanten am Anfang von `game.js` einstellen:
 `RUN` (Laufgeschwindigkeit), `JUMP_V` (Sprungkraft), `GRAV` (Schwerkraft), `MAX_HP` und `START_LIVES`.
 Die Farben der Level stehen in `THEMES` in `game.js`.
+
+## Lizenz
+
+Veröffentlicht unter der [MIT-Lizenz](LICENSE). Der Code darf frei genutzt, verändert und weitergegeben werden, solange der Copyright-Hinweis erhalten bleibt.
