@@ -1,4 +1,4 @@
-// Cave Run – Leveldaten
+// Deepgleam – Leveldaten
 //
 // Jedes Level besteht aus Abschnitten (Chunks), die von links nach rechts
 // aneinandergehängt werden. Jeder Abschnitt hat 12 Zeilen, eine Kachel = 16 px.

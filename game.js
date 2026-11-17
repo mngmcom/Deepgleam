@@ -5,7 +5,8 @@
   const STEP = 1 / 60;
   const GRAV = 950, JUMP_V = 330, RUN = 95, MAX_FALL = 420;
   const MAX_HP = 6, START_LIVES = 3;
-  const HS_KEY = 'caverun.highscore';
+  const HS_KEY = 'deepgleam.highscore';
+  const HS_KEY_OLD = 'caverun.highscore';
 
   const canvas = document.getElementById('game');
   const ctx = canvas.getContext('2d');
@@ -482,7 +483,10 @@
   let shake = 0, ambT = 3, introT = 0;
   const cam = { x: 0, y: 0 };
 
-  try { highscore = parseInt(localStorage.getItem(HS_KEY), 10) || 0; } catch (e) { /* kein Speicher */ }
+  try {
+    // Highscore aus der Zeit vor der Umbenennung übernehmen
+    highscore = parseInt(localStorage.getItem(HS_KEY) ?? localStorage.getItem(HS_KEY_OLD), 10) || 0;
+  } catch (e) { /* kein Speicher */ }
   function saveHigh() {
     if (score > highscore) {
       highscore = score; newHigh = true;
@@ -642,7 +646,7 @@
   }
 
   function hurt(amount, srcX) {
-    if (P.inv > 0 || state !== 'play' || window.caveRun.god) return;
+    if (P.inv > 0 || state !== 'play' || window.deepgleam.god) return;
     P.hp -= amount;
     P.inv = 1.3;
     P.vy = -200;
@@ -1299,7 +1303,7 @@
     switch (state) {
       case 'title':
         dim(0.5);
-        drawTextC('CAVE RUN', 30, '#ffd060', 4);
+        drawTextC('DEEPGLEAM', 30, '#ffd060', 4);
         drawTextC('FINDE DEN VERLORENEN GOLDSCHATZ', 60, '#c8b088');
         drawTextC(LEVELS.length + ' LEVEL: ' + LEVELS.map((l) => l.name).join(' - '), 72, '#8a7860');
         if (blink()) drawTextC('ENTER ODER LEERTASTE ZUM STARTEN', 96, '#ffffff');
@@ -1350,10 +1354,10 @@
   }
 
   // Debug-Hilfe für die Browser-Konsole:
-  //   caveRun.level(3)          – direkt zu Level 3 springen
-  //   caveRun.teleport(120, 9)  – an Kachelspalte/-zeile versetzen
-  //   caveRun.god = true        – keinen Schaden nehmen (Lava/Abgrund bleiben tödlich)
-  window.caveRun = {
+  //   deepgleam.level(3)          – direkt zu Level 3 springen
+  //   deepgleam.teleport(120, 9)  – an Kachelspalte/-zeile versetzen
+  //   deepgleam.god = true        – keinen Schaden nehmen (Lava/Abgrund bleiben tödlich)
+  window.deepgleam = {
     god: false,
     get player() { return P; },
     get state() { return state; },

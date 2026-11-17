@@ -83,9 +83,9 @@ Ein neues Level ist einfach ein weiterer Eintrag in `LEVELS`. Die Spielfigur spr
 
 | Befehl | Wirkung |
 |---|---|
-| `caveRun.level(3)` | direkt zu Level 3 springen |
-| `caveRun.teleport(120, 9)` | an Kachelspalte und -zeile versetzen |
-| `caveRun.god = true` | keinen Schaden nehmen (Lava und Abgründe bleiben tödlich) |
+| `deepgleam.level(3)` | direkt zu Level 3 springen |
+| `deepgleam.teleport(120, 9)` | an Kachelspalte und -zeile versetzen |
+| `deepgleam.god = true` | keinen Schaden nehmen (Lava und Abgründe bleiben tödlich) |
 
 ## Anpassen
 
