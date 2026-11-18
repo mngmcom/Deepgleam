@@ -5,6 +5,7 @@
   const STEP = 1 / 60;
   const GRAV = 950, JUMP_V = 330, RUN = 95, MAX_FALL = 420;
   const MAX_HP = 6, START_LIVES = 3;
+  const SHIELD_TIME = 8, DOUBLE_TIME = 12; // Dauer der Spezial-Items in Sekunden
   const HS_KEY = 'deepgleam.highscore';
   const HS_KEY_OLD = 'caverun.highscore';
 
@@ -191,6 +192,7 @@
     clear() { [392, 523, 659, 784, 1047].forEach((f, i) => Sound.tone(f, 0.18, { delay: i * 0.1, type: 'triangle', vol: 0.09 })); },
     win() { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => Sound.tone(f, 0.22, { delay: i * 0.13, type: 'triangle', vol: 0.1 })); },
     drip() { Sound.tone(1400 + Math.random() * 600, 0.08, { type: 'sine', slide: -900, vol: 0.035 }); },
+    power() { [523, 784, 1047, 1568, 2093].forEach((f, i) => Sound.tone(f, 0.1, { delay: i * 0.05, type: 'square', vol: 0.05 })); },
     bubble() { Sound.tone(70 + Math.random() * 40, 0.2, { type: 'sine', slide: 60, vol: 0.05 }); },
   };
 
@@ -281,6 +283,13 @@
     { y: '#b8860b', Y: '#ffd040', W: '#fff6c0' });
   const GEM = sprite(['..ccc..', '.cCWCc.', 'cCCWCCc', '.cCCCc.', '..cCc..', '...c...'],
     { c: '#1a6aa0', C: '#40c0ff', W: '#e0ffff' });
+  // Spezial-Items: Schild (unverwundbar) und Doppelgold (Gold zählt doppelt)
+  const SHIELD_ITEM = sprite(
+    ['.kkkkkk.', 'kWWCCCCk', 'kWCCCCck', 'kCCWCCck', 'kCCCCcck', '.kCCCck.', '.kCccck.', '..kcck..', '...kk...'],
+    { k: '#1a4a6a', C: '#60d0ff', c: '#3090c0', W: '#e8ffff' });
+  const DOUBLE_ITEM = sprite(
+    ['..yyyyy..', '.yYYYYYy.', 'yYWddYYYy', 'yYYYYdYYy', 'yYYYdYYYy', 'yYYdYYYYy', 'yYYdddYYy', '.yYYYYYy.', '..yyyyy..'],
+    { y: '#b8860b', Y: '#ffd040', W: '#fff6c0', d: '#8a5a08' });
   const STAL_ROWS = [
     'aAAAAAAAAa', '.ahAAAAAa.', '.ahAAAAAa.', '..ahAAAa..', '..ahAAAa..', '...hAAa...',
     '...hAAa...', '...hAa....', '....Aa....', '....Aa....', '....a.....', '....a.....',
@@ -518,7 +527,7 @@
     for (let y = 0; y < ROWS; y++)
       for (let x = 0; x < COLS; x++) {
         const ch = grid[y][x];
-        if ('PsbovC*TfEKGLxm'.includes(ch)) {
+        if ('PsbovC*TfEKGLxmSD'.includes(ch)) {
           spawns.push({ ch, tx: x, ty: y });
           grid[y][x] = ch === 'L' ? '~' : '.';
         }
@@ -555,6 +564,8 @@
         case '*': entities.push({ type: 'gem', x: px + 4, y: py + 6, w: 7, h: 6, t: r * 6 }); break;
         case 'v': entities.push({ type: 'stal', x: px + 3, y: py, w: 10, h: 12, y0: py, state: 0, t: 0, vy: 0 }); break;
         case 'C': entities.push({ type: 'cp', x: px + 4, y: py, w: 8, h: 16, active: false }); break;
+        case 'S': entities.push({ type: 'shield', x: px + 4, y: py + 4, w: 8, h: 9, t: r * 6 }); break;
+        case 'D': entities.push({ type: 'double', x: px + 3, y: py + 4, w: 9, h: 9, t: r * 6 }); break;
         case 'T': entities.push({ type: 'chest', x: px, y: py + 4, w: 16, h: 12, open: false }); break;
         case 'E': entities.push({ type: 'exit', x: px, y: py - 8, w: 16, h: 24, hb: { x: px + 4, y: py, w: 8, h: 16 } }); break;
         case 'f': entities.push({ type: 'torch', x: px + 8, y: py + 8, w: 0, h: 0 }); break;
@@ -568,7 +579,7 @@
     P = {
       x: checkpoint.x, y: checkpoint.y, w: 8, h: 15, vx: 0, vy: 0, face: 1,
       onGround: false, onPlatform: false, standing: [], coyote: 0, jumpBuf: 0, dropT: 0,
-      inv: 1.0, hp: MAX_HP, animT: 0,
+      inv: 1.0, hp: MAX_HP, animT: 0, shield: 0, dbl: 0,
     };
     // Bröckelplatten wiederherstellen, damit man nie feststeckt
     for (const c of crumbles) { c.state = 0; c.t = 0; grid[c.ty][c.tx] = '%'; }
@@ -646,7 +657,7 @@
   }
 
   function hurt(amount, srcX) {
-    if (P.inv > 0 || state !== 'play' || window.deepgleam.god) return;
+    if (P.inv > 0 || P.shield > 0 || state !== 'play' || window.deepgleam.god) return;
     P.hp -= amount;
     P.inv = 1.3;
     P.vy = -200;
@@ -698,6 +709,12 @@
     }
 
     if (P.inv > 0) P.inv -= dt;
+    if (P.shield > 0) P.shield -= dt;
+    if (P.dbl > 0) {
+      P.dbl -= dt;
+      if (Math.random() < 0.15)
+        burst(P.x + Math.random() * P.w, P.y + Math.random() * P.h, 1, ['#ffd040', '#fff6c0'], { speed: 10, grav: -30, life: 0.5 });
+    }
     P.animT = P.onGround ? P.animT + dt * Math.abs(P.vx) / 12 : 0;
 
     // Stacheln und Lava
@@ -706,7 +723,7 @@
     for (let ty = y0; ty <= y1; ty++)
       for (let tx = x0; tx <= x1; tx++) {
         const c = tile(tx, ty);
-        if (c === '^' && overlap(P, { x: tx * TS + 1, y: ty * TS + 9, w: 14, h: 7 })) {
+        if (c === '^' && P.shield <= 0 && overlap(P, { x: tx * TS + 1, y: ty * TS + 9, w: 14, h: 7 })) {
           hurt(1, P.x + P.w / 2 + P.face);
           if (state === 'play') P.vy = -260;
         } else if (c === '~' && state === 'play' && P.y + P.h > ty * TS + 7) {
@@ -751,16 +768,23 @@
   }
 
   // mode: 'stomp' = per Kopfsprung besiegbar, 'spiked' = Kopfsprung verletzt, 'never' = nur ausweichen
+  function defeat(e, points, colors, bounce) {
+    e.dead = true;
+    if (bounce) P.vy = keyJump() ? -JUMP_V : -220;
+    score += points;
+    floater(e.x, e.y - 6, '+' + points);
+    sfx.stomp();
+    burst(e.x + e.w / 2, e.y + e.h / 2, 12, colors);
+  }
+
+  // Mit Schild werden besiegbare Monster bei jeder Berührung besiegt, der Glutling ist harmlos.
   function hitEnemy(e, box, points, mode, colors) {
     if (state !== 'play' || !overlap(P, box)) return;
     const fromAbove = P.vy > 0 && P.y + P.h - P.vy * STEP <= box.y + 4;
-    if (fromAbove && mode === 'stomp') {
-      e.dead = true;
-      P.vy = keyJump() ? -JUMP_V : -220;
-      score += points;
-      floater(e.x, e.y - 6, '+' + points);
-      sfx.stomp();
-      burst(e.x + e.w / 2, e.y + e.h / 2, 12, colors);
+    if (P.shield > 0) {
+      if (mode !== 'never') defeat(e, points, colors, fromAbove);
+    } else if (fromAbove && mode === 'stomp') {
+      defeat(e, points, colors, true);
     } else if (fromAbove && mode === 'spiked') {
       hurt(1, e.x + e.w / 2);
       P.vy = -280;
@@ -850,11 +874,29 @@
           e.t += dt;
           if (state === 'play' && overlap(P, e)) {
             e.dead = true;
-            const val = e.type === 'gold' ? 50 : 250;
+            const doubled = e.type === 'gold' && P.dbl > 0;
+            const val = e.type === 'gold' ? (doubled ? 100 : 50) : 250;
             score += val;
-            floater(e.x, e.y - 4, '+' + val);
+            floater(e.x, e.y - 4, '+' + val, doubled ? '#ffd040' : undefined);
             if (e.type === 'gold') { sfx.coin(); burst(e.x + 3, e.y + 2, 6, ['#ffd040', '#fff6c0']); }
             else { sfx.gem(); burst(e.x + 3, e.y + 3, 10, ['#40c0ff', '#e0ffff']); }
+          }
+          break;
+        case 'shield':
+        case 'double':
+          e.t += dt;
+          if (state === 'play' && overlap(P, e)) {
+            e.dead = true;
+            sfx.power();
+            if (e.type === 'shield') {
+              P.shield = SHIELD_TIME;
+              floater(e.x - 10, e.y - 6, 'SCHILD!', '#80e0ff');
+              burst(e.x + 4, e.y + 4, 16, ['#60d0ff', '#e8ffff', '#3090c0'], { speed: 70, grav: 80 });
+            } else {
+              P.dbl = DOUBLE_TIME;
+              floater(e.x - 12, e.y - 6, 'GOLD X2!', '#ffd040');
+              burst(e.x + 4, e.y + 4, 16, ['#ffd040', '#fff6c0', '#b8860b'], { speed: 70, grav: 80 });
+            }
           }
           break;
         case 'stal':
@@ -1123,6 +1165,15 @@
     if (state === 'clear') ctx.globalAlpha = Math.max(0, 1 - clearT * 1.5);
     ctx.drawImage(img, Math.round(P.x - 2), Math.round(P.y - 1));
     ctx.globalAlpha = 1;
+    // Schild: kreisende Funken, blinken kurz vor dem Ablaufen
+    if (P.shield > 0 && (P.shield > 2 || Math.floor(time * 10) % 2)) {
+      const cx = P.x + P.w / 2, cy = P.y + P.h / 2;
+      for (let i = 0; i < 6; i++) {
+        const a = time * 4 + i * Math.PI / 3;
+        ctx.fillStyle = i % 2 ? '#60d0ff' : '#e8ffff';
+        ctx.fillRect(Math.round(cx + Math.cos(a) * 10), Math.round(cy + Math.sin(a) * 12), 1, 1);
+      }
+    }
   }
 
   function collectLights(cx, cy) {
@@ -1135,12 +1186,15 @@
     const fl = state === 'title' ? 0 : Math.sin(time * 13) * 1.5 + Math.random() * 1.5;
     const lr = state === 'clear' ? 74 * Math.max(0, 1 - clearT) : 74 + fl;
     add(lp.x, lp.y, lr, 1, '255,170,70', 0.05);
+    if (P.shield > 0) add(P.x + P.w / 2, P.y + P.h / 2, 26, 0.6, '90,200,255', 0.08);
     for (const e of entities) {
       switch (e.type) {
         case 'torch': add(e.x, e.y - 2, 48 + Math.random() * 3, 0.9, '255,140,40', 0.05); break;
         case 'cp': if (e.active) add(e.x + 6, e.y + 8, 40 + Math.random() * 2, 0.85, '255,190,80', 0.05); break;
         case 'gem': add(e.x + 3, e.y + 3, 14, 0.7, '80,180,255', 0.08); break;
         case 'gold': add(e.x + 3, e.y + 2, 9, 0.5); break;
+        case 'shield': add(e.x + 4, e.y + 4, 22 + Math.sin(time * 4) * 2, 0.8, '90,200,255', 0.1); break;
+        case 'double': add(e.x + 4, e.y + 4, 22 + Math.sin(time * 4) * 2, 0.8, '255,200,60', 0.1); break;
         case 'chest': add(e.x + 8, e.y + 4, e.open ? 70 : 34, 0.9, '255,200,60', e.open ? 0.09 : 0.06); break;
         case 'exit': add(e.x + 8, e.y + 14, 56, 1, '255,230,170', 0.06); break;
         case 'crystal': add(e.x + 8, e.y + 10, 26 + Math.sin(time * 2 + e.v * 9) * 2, 0.75, '90,170,255', 0.07); break;
@@ -1189,6 +1243,8 @@
       case 'mushroom': drawMushroomDeco(e); break;
       case 'gold': ctx.drawImage(NUGGET, x, Math.round(e.y + Math.sin(e.t * 3) * 1.5)); break;
       case 'gem': ctx.drawImage(GEM, x, Math.round(e.y + Math.sin(e.t * 3) * 1.5)); break;
+      case 'shield': ctx.drawImage(SHIELD_ITEM, x, Math.round(e.y + Math.sin(e.t * 3) * 1.5)); break;
+      case 'double': ctx.drawImage(DOUBLE_ITEM, x, Math.round(e.y + Math.sin(e.t * 3) * 1.5)); break;
       case 'stal': ctx.drawImage(STAL, x + (e.state === 1 ? Math.round((Math.random() - 0.5) * 2) : 0), y); break;
       case 'spider': { const f = SPIDER[Math.floor(e.t * 8) % 2]; ctx.drawImage(f.r, x, y); pushEyes(f.eyesR); break; }
       case 'bat': { const f = BAT[Math.floor(e.t * 8) % 2]; ctx.drawImage(f.r, x, y); pushEyes(f.eyesR); break; }
@@ -1285,6 +1341,18 @@
       else { ctx.fillRect(x, 4, 8, 1); ctx.fillRect(x, 8, 8, 1); ctx.fillRect(x, 4, 1, 5); ctx.fillRect(x + 7, 4, 1, 5); }
     }
     if (Sound.muted) drawText('M', W - 8, 4, '#806a50');
+    // Aktive Spezial-Items mit Restzeit, blinken in den letzten 2 Sekunden
+    let hy = 16;
+    const item = (img, label, t, color) => {
+      if (t <= 0) return;
+      if (t > 2 || Math.floor(time * 8) % 2) {
+        ctx.drawImage(img, 6, hy);
+        drawText(label + ' ' + Math.ceil(t), 18, hy + 2, color);
+      }
+      hy += 12;
+    };
+    item(SHIELD_ITEM, 'SCHILD', P.shield, '#80e0ff');
+    item(DOUBLE_ITEM, 'GOLD X2', P.dbl, '#ffd040');
   }
 
   function renderIntro() {
