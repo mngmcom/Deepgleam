@@ -508,16 +508,22 @@
     level = LEVELS[idx];
     theme = THEMES[level.theme] || THEMES.earth;
     const chunks = level.chunks;
-    ROWS = chunks[0].length;
+    // Abschnitte mit down(n, ...) liegen samt allen folgenden n Zeilen tiefer.
+    // Darüber wird mit der ersten Zeile aufgefüllt (Fels), darunter mit der letzten
+    // (Boden bleibt Boden, Abgründe bleiben offen, Lava wird tiefer).
+    let depth = 0;
+    const offs = chunks.map((c) => (depth += c.down || 0));
+    const baseRows = Math.max(...chunks.map((c) => c.length));
+    ROWS = baseRows + depth;
     const rowStrings = [];
     for (let r = 0; r < ROWS; r++) {
       let s = '';
-      for (const chunk of chunks) {
+      chunks.forEach((chunk, i) => {
         const w = Math.max(...chunk.map((l) => l.length));
-        let line = chunk[r] || '.';
+        let line = chunk[clamp(r - offs[i], 0, chunk.length - 1)] || '.';
         while (line.length < w) line += line[line.length - 1];
         s += line;
-      }
+      });
       rowStrings.push(s);
     }
     COLS = rowStrings[0].length;
@@ -1373,7 +1379,7 @@
         dim(0.5);
         drawTextC('DEEPGLEAM', 30, '#ffd060', 4);
         drawTextC('FINDE DEN VERLORENEN GOLDSCHATZ', 60, '#c8b088');
-        drawTextC(LEVELS.length + ' LEVEL: ' + LEVELS.map((l) => l.name).join(' - '), 72, '#8a7860');
+        drawTextC(LEVELS.length + ' LEVEL IN ' + new Set(LEVELS.map((l) => l.theme)).size + ' HÖHLENWELTEN', 72, '#8a7860');
         if (blink()) drawTextC('ENTER ODER LEERTASTE ZUM STARTEN', 96, '#ffffff');
         drawTextC('PFEILE / A D: LAUFEN    LEERTASTE / W: SPRINGEN', 128, '#a89070');
         drawTextC('PFEIL RUNTER: DURCH PLANKE    P: PAUSE    M: TON', 138, '#a89070');

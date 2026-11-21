@@ -5,7 +5,7 @@
 Oder [als ZIP herunterladen](https://github.com/mngmcom/Deepgleam/releases/latest), entpacken und `index.html` im Browser öffnen.
 
 Ein kleines Side-Scrolling-Jump-and-Run im Pixel-Look, das direkt im Browser läuft.
-Ein Abenteurer erkundet mit seiner Laterne vier dunkle Höhlen und sucht einen verlorenen Goldschatz.
+Ein Abenteurer erkundet mit seiner Laterne acht dunkle Höhlen in vier Höhlenwelten und sucht einen verlorenen Goldschatz.
 
 ![Screenshot: Der Abenteurer mit Laterne in den Höhlenruinen, daneben eine Wandfackel, ein Edelstein und zwei Spinnen](docs/screenshot.png)
 
@@ -26,19 +26,19 @@ Ein Abenteurer erkundet mit seiner Laterne vier dunkle Höhlen und sucht einen v
 
 ## Die Level
 
-Jedes Level hat eine eigene Farbwelt, ein eigenes Monster und ein Spezial-Item. Die ersten drei enden an einem Ausgang, das letzte an der Schatztruhe.
+Das Spiel hat 8 Level in 4 Höhlenwelten. Jede Welt hat eine eigene Farbwelt und ein eigenes Monster und besteht aus zwei aufeinanderfolgenden Leveln. Das zweite ist jeweils etwas schwerer. Jedes Level enthält ein Spezial-Item. Unterwegs geht es zweimal eine Stufe hinab, sodass der Ausgang tiefer liegt als der Start. Die ersten sieben Level enden an einem Ausgang, das letzte an der Schatztruhe.
 
-| Level | Name | Spezial-Monster | Spezial-Item | Besonderheiten |
+| Level | Welt | Spezial-Monster | Spezial-Item | Besonderheiten |
 |---|---|---|---|---|
-| 1 | Erdhöhle | Spinne und Fledermaus | Doppelgold | Stacheln, Abgründe, fallende Stalaktiten |
-| 2 | Kristallgrotte | **Kristallkäfer**: fährt regelmäßig Kristallstacheln aus. Nur besiegbar, wenn die Stacheln eingefahren sind. Kurz vorher blinken sie auf. | Schild | leuchtende Kristalle, Kristallstacheln |
-| 3 | Pilzgrotte | **Sporenpilz**: schießt Giftsporen gezielt auf den Spieler. Per Kopfsprung besiegbar. | Schild | leuchtende Pilze, Dornen |
-| 4 | Lavahöhle | **Glutling**: springt aus der Lava hoch und ist nicht besiegbar. Blubbernde Lava kündigt ihn an. | Doppelgold | tödliche Lava, Bröckelplatten, die kurz nach dem Betreten zerfallen |
+| 1 Erdhöhle<br>2 Alte Stollen | Erde | Spinne und Fledermaus | Doppelgold<br>Schild | Stacheln, Abgründe, fallende Stalaktiten, Holzgerüste |
+| 3 Kristallgrotte<br>4 Kristallhallen | Kristall | **Kristallkäfer**: fährt regelmäßig Kristallstacheln aus. Nur besiegbar, wenn die Stacheln eingefahren sind. Kurz vorher blinken sie auf. | Schild<br>Doppelgold | leuchtende Kristalle, Kristallstacheln, Käfer auf schmalen Brücken |
+| 5 Pilzgrotte<br>6 Sporenwald | Pilz | **Sporenpilz**: schießt Giftsporen gezielt auf den Spieler. Per Kopfsprung besiegbar. | Schild<br>Doppelgold | leuchtende Pilze, Dornen, Moorbrücke |
+| 7 Lavahöhle<br>8 Feuerschlund | Lava | **Glutling**: springt aus der Lava hoch und ist nicht besiegbar. Blubbernde Lava kündigt ihn an. | Doppelgold<br>Schild | tödliche Lava, Bröckelplatten, die kurz nach dem Betreten zerfallen, Basaltsäulen |
 
 <p>
-  <img src="docs/level2.png" width="32%" alt="Level 2: Kristallgrotte mit zwei leuchtenden Kristallkäfern">
-  <img src="docs/level3.png" width="32%" alt="Level 3: Pilzgrotte mit einem Sporenpilz, der eine Spore abschießt">
-  <img src="docs/level4.png" width="32%" alt="Level 4: Lavahöhle mit einem Glutling, der aus der Lava springt">
+  <img src="docs/level2.png" width="32%" alt="Level 3: Kristallgrotte mit zwei leuchtenden Kristallkäfern">
+  <img src="docs/level3.png" width="32%" alt="Level 5: Pilzgrotte mit einem Sporenpilz, der eine Spore abschießt">
+  <img src="docs/level4.png" width="32%" alt="Level 7: Lavahöhle mit einem Glutling, der aus der Lava springt">
 </p>
 
 ## Spielprinzip
@@ -63,6 +63,7 @@ Jedes Level hat eine eigene Farbwelt, ein eigenes Monster und ein Spezial-Item. 
 | `index.html` | Seite mit dem Canvas, skaliert pixelgenau auf die Fenstergröße |
 | `level.js` | Leveldaten als Text: Name, Farbwelt und Abschnitte je Level |
 | `game.js` | Spiellogik, Grafik, Licht und Sound |
+| `CHANGELOG.md` | Änderungen je Version |
 | `.github/workflows/release.yml` | baut bei jedem Push auf `main` eine Release mit ZIP-Download, bei Pull Requests nur eine Test-ZIP |
 
 Technik: reines JavaScript mit HTML5 Canvas, interne Auflösung 320×180 Pixel bei 16×16-Kacheln. Alle Grafiken und Soundeffekte werden im Code erzeugt (Pixel-Sprites aus Zeichenketten, Töne über die Web Audio API).
@@ -87,7 +88,9 @@ Die Level stehen in `level.js` in der Liste `LEVELS`. Jedes Level hat einen Name
 | `L` | Glutling (in die Lava setzen) | `S` | Schild (unverwundbar) |
 | `D` | Doppelgold (Gold zählt doppelt) | | |
 
-Ein neues Level ist einfach ein weiterer Eintrag in `LEVELS`. Die Spielfigur springt etwa 3 Kacheln hoch und 3 bis 4 Kacheln weit. Dafür braucht sie über dem Absprung etwa 4 Kacheln Platz nach oben. Hängt die Decke tiefer, bricht der Sprung früher ab und die Weite sinkt deutlich.
+Um tiefer in die Höhle zu führen, setzt man einen Abschnitt mit `down(2, [ ... ])` statt `[ ... ]` ein. Dieser Abschnitt und alle folgenden liegen dann 2 Kacheln tiefer. Darüber füllt das Spiel mit Fels auf, darunter mit der letzten Zeile des Abschnitts, sodass Abgründe offen bleiben. Damit man hinunterlaufen kann, sollte der linke Rand des tieferen Abschnitts in den Zeilen 6 und 7 frei sein.
+
+Ein neues Level ist einfach ein weiterer Eintrag in `LEVELS`. Die Reihenfolge in der Liste ist die Spielreihenfolge. Das letzte Level sollte mit der Schatztruhe `T` enden, alle anderen mit einem Ausgang `E`. Die Spielfigur springt etwa 3 Kacheln hoch und 3 bis 4 Kacheln weit. Dafür braucht sie über dem Absprung etwa 4 Kacheln Platz nach oben. Hängt die Decke tiefer, bricht der Sprung früher ab und die Weite sinkt deutlich.
 
 ### Testen in der Browser-Konsole
 
@@ -102,6 +105,10 @@ Ein neues Level ist einfach ein weiterer Eintrag in `LEVELS`. Die Spielfigur spr
 Spielgefühl und Schwierigkeit lassen sich über die Konstanten am Anfang von `game.js` einstellen:
 `RUN` (Laufgeschwindigkeit), `JUMP_V` (Sprungkraft), `GRAV` (Schwerkraft), `MAX_HP`, `START_LIVES` sowie `SHIELD_TIME` und `DOUBLE_TIME` (Wirkdauer der Spezial-Items in Sekunden).
 Die Farben der Level stehen in `THEMES` in `game.js`.
+
+## Änderungen
+
+Was sich in welcher Version geändert hat, steht in [CHANGELOG.md](CHANGELOG.md).
 
 ## Lizenz
 
