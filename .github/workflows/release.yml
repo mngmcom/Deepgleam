@@ -28,7 +28,7 @@ jobs:
       - name: ZIP bauen
         run: |
           mkdir -p dist/Deepgleam
-          cp index.html game.js level.js README.md CHANGELOG.md LICENSE dist/Deepgleam/
+          cp index.html game.js level.js README.md README.de.md CHANGELOG.md LICENSE dist/Deepgleam/
           cd dist
           zip -r "Deepgleam-${{ steps.version.outputs.tag }}.zip" Deepgleam
 

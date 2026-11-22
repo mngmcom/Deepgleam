@@ -1,115 +1,122 @@
 # Deepgleam
 
-### ▶ [Hier spielen](https://mngmcom.github.io/Deepgleam/)
+**English** | [Deutsch](README.de.md)
 
-Oder [als ZIP herunterladen](https://github.com/mngmcom/Deepgleam/releases/latest), entpacken und `index.html` im Browser öffnen.
+### ▶ [Play here](https://mngmcom.github.io/Deepgleam/)
 
-Ein kleines Side-Scrolling-Jump-and-Run im Pixel-Look, das direkt im Browser läuft.
-Ein Abenteurer erkundet mit seiner Laterne acht dunkle Höhlen in vier Höhlenwelten und sucht einen verlorenen Goldschatz.
+Or [download the ZIP](https://github.com/mngmcom/Deepgleam/releases/latest), unpack it and open `index.html` in your browser.
 
-![Screenshot: Der Abenteurer mit Laterne in den Höhlenruinen, daneben eine Wandfackel, ein Edelstein und zwei Spinnen](docs/screenshot.png)
+A small pixel-art side-scrolling platformer that runs right in the browser.
+An explorer carrying a lantern makes their way through eight dark caves in four cave worlds, searching for a lost treasure of gold.
 
-## Starten
+![Screenshot: the explorer with a lantern in the cave ruins, next to a wall torch, a gem and two spiders](docs/screenshot.png)
 
-`index.html` im Browser öffnen. Es braucht weder einen Server noch einen Build-Schritt oder Abhängigkeiten.
+## Getting started
 
-## Steuerung
+Open `index.html` in a browser. No server, build step or dependencies needed.
 
-| Taste | Aktion |
+## Controls
+
+| Key | Action |
 |---|---|
-| Pfeil links / rechts, A / D | Laufen |
-| Leertaste, W, Pfeil hoch | Springen (länger halten = höher) |
-| Pfeil runter, S | Durch eine Planke fallen |
+| Left / Right arrow, A / D | Run |
+| Space, W, Up arrow | Jump (hold longer to jump higher) |
+| Down arrow, S | Drop through a plank |
 | P, Esc | Pause |
-| M | Ton an / aus |
-| Enter | Start / Weiter / Neustart |
+| M | Sound on / off |
+| Enter | Start / Continue / Restart |
 
-## Die Level
+## The levels
 
-Das Spiel hat 8 Level in 4 Höhlenwelten. Jede Welt hat eine eigene Farbwelt und ein eigenes Monster und besteht aus zwei aufeinanderfolgenden Leveln. Das zweite ist jeweils etwas schwerer. Jedes Level enthält ein Spezial-Item. Unterwegs geht es zweimal eine Stufe hinab, sodass der Ausgang tiefer liegt als der Start. Die ersten sieben Level enden an einem Ausgang, das letzte an der Schatztruhe.
+The game has 8 levels in 4 cave worlds. Each world has its own color palette and its own monster, and consists of two consecutive levels, the second being a bit harder. Every level contains one special item. Twice per level the path steps down, so the exit lies deeper than the start. The first seven levels end at an exit, the last one at the treasure chest.
 
-| Level | Welt | Spezial-Monster | Spezial-Item | Besonderheiten |
+| Level | World | Special monster | Special item | Features |
 |---|---|---|---|---|
-| 1 Erdhöhle<br>2 Alte Stollen | Erde | Spinne und Fledermaus | Doppelgold<br>Schild | Stacheln, Abgründe, fallende Stalaktiten, Holzgerüste |
-| 3 Kristallgrotte<br>4 Kristallhallen | Kristall | **Kristallkäfer**: fährt regelmäßig Kristallstacheln aus. Nur besiegbar, wenn die Stacheln eingefahren sind. Kurz vorher blinken sie auf. | Schild<br>Doppelgold | leuchtende Kristalle, Kristallstacheln, Käfer auf schmalen Brücken |
-| 5 Pilzgrotte<br>6 Sporenwald | Pilz | **Sporenpilz**: schießt Giftsporen gezielt auf den Spieler. Per Kopfsprung besiegbar. | Schild<br>Doppelgold | leuchtende Pilze, Dornen, Moorbrücke |
-| 7 Lavahöhle<br>8 Feuerschlund | Lava | **Glutling**: springt aus der Lava hoch und ist nicht besiegbar. Blubbernde Lava kündigt ihn an. | Doppelgold<br>Schild | tödliche Lava, Bröckelplatten, die kurz nach dem Betreten zerfallen, Basaltsäulen |
+| 1 Erdhöhle<br>2 Alte Stollen | Earth | Spider and bat | Double gold<br>Shield | Spikes, chasms, falling stalactites, wooden scaffolding |
+| 3 Kristallgrotte<br>4 Kristallhallen | Crystal | **Crystal beetle**: extends crystal spikes at regular intervals. Can only be defeated while the spikes are retracted. They flash briefly before coming out. | Shield<br>Double gold | Glowing crystals, crystal spikes, beetles on narrow bridges |
+| 5 Pilzgrotte<br>6 Sporenwald | Fungus | **Spore mushroom**: fires poison spores at the player. Can be defeated by jumping on its head. | Shield<br>Double gold | Glowing mushrooms, thorns, bog bridge |
+| 7 Lavahöhle<br>8 Feuerschlund | Lava | **Ember**: leaps out of the lava and cannot be defeated. Bubbling lava announces it. | Double gold<br>Shield | Deadly lava, crumbling platforms that break apart shortly after you step on them, basalt columns |
+
+The level names are in German, as they appear in the game.
 
 <p>
-  <img src="docs/level2.png" width="32%" alt="Level 3: Kristallgrotte mit zwei leuchtenden Kristallkäfern">
-  <img src="docs/level3.png" width="32%" alt="Level 5: Pilzgrotte mit einem Sporenpilz, der eine Spore abschießt">
-  <img src="docs/level4.png" width="32%" alt="Level 7: Lavahöhle mit einem Glutling, der aus der Lava springt">
+  <img src="docs/level2.png" width="32%" alt="Level 3: Kristallgrotte with two glowing crystal beetles">
+  <img src="docs/level3.png" width="32%" alt="Level 5: Pilzgrotte with a spore mushroom firing a spore">
+  <img src="docs/level4.png" width="32%" alt="Level 7: Lavahöhle with an ember leaping out of the lava">
 </p>
 
-## Spielprinzip
+## How to play
 
-- Die Höhle ist dunkel. Nur der Lichtkreis der Laterne und leuchtende Dinge wie Fackeln, Kristalle oder Lava zeigen den Weg.
-- **Gold** bringt 50 Punkte, **Edelsteine** 250, besiegte Monster 100 bis 200.
-- Gegner besiegt man mit einem Sprung auf den Kopf. Seitliche Berührung kostet HP.
-- In jedem Level liegt ein **Spezial-Item**. Oben links im Bild steht, wie lange es noch wirkt. Kurz vor dem Ende blinkt die Anzeige.
-  - **Schild** (blau): 8 Sekunden unverwundbar. Stacheln, Sporen und Stalaktiten richten keinen Schaden an, Monster werden bei Berührung besiegt. Der Glutling ist harmlos, bleibt aber unbesiegbar. Abgründe und Lava bleiben tödlich.
-  - **Doppelgold** (Goldmünze mit 2): 12 Sekunden lang bringt jedes Goldnugget 100 statt 50 Punkte.
-  - Wer ein Leben verliert, verliert auch die Wirkung. Ein eingesammeltes Item kommt nicht zurück.
-- **Checkpoints** (Laternen am Pfahl) speichern den Wiedereinstieg und füllen die HP auf.
-- Bei 0 HP, einem Sturz in den Abgrund oder in die Lava geht ein Leben verloren.
-- Ein abgeschlossenes Level bringt 1000 Bonuspunkte plus 100 je übrigem HP. Die Schatztruhe am Ende bringt einen großen Bonus.
-- Nach einem Game Over startet man das aktuelle Level mit 3 Leben neu. Die Punkte springen auf den Stand zu Levelbeginn zurück.
-- Der Highscore wird im Browser gespeichert (`localStorage`).
+- The cave is dark. Only the lantern's circle of light and glowing things like torches, crystals or lava show the way.
+- **Gold** is worth 50 points, **gems** 250, defeated monsters 100 to 200.
+- Defeat enemies by jumping on their heads. Touching them from the side costs HP.
+- Every level holds one **special item**. The top left of the screen shows how long it lasts, and the display flashes shortly before it runs out.
+  - **Shield** (blue): invulnerable for 8 seconds. Spikes, spores and stalactites do no damage, and monsters are defeated on contact. The ember becomes harmless but stays undefeatable. Chasms and lava are still deadly.
+  - **Double gold** (gold coin with a 2): for 12 seconds every gold nugget is worth 100 points instead of 50.
+  - Losing a life also ends the effect. A collected item does not come back.
+- **Checkpoints** (lanterns on a post) set your respawn point and refill your HP.
+- You lose a life at 0 HP or when you fall into a chasm or the lava.
+- Finishing a level earns 1000 bonus points plus 100 per remaining HP. The treasure chest at the end gives a big bonus.
+- After a game over you restart the current level with 3 lives. Your score resets to what it was at the start of the level.
+- The high score is saved in the browser (`localStorage`).
 
-## Projektaufbau
+## Project layout
 
-| Datei | Inhalt |
+| File | Contents |
 |---|---|
-| `index.html` | Seite mit dem Canvas, skaliert pixelgenau auf die Fenstergröße |
-| `level.js` | Leveldaten als Text: Name, Farbwelt und Abschnitte je Level |
-| `game.js` | Spiellogik, Grafik, Licht und Sound |
-| `CHANGELOG.md` | Änderungen je Version |
-| `.github/workflows/release.yml` | baut bei jedem Push auf `main` eine Release mit ZIP-Download, bei Pull Requests nur eine Test-ZIP |
+| `index.html` | Page with the canvas, scaled pixel-perfect to the window size |
+| `level.js` | Level data as text: name, color theme and sections for each level |
+| `game.js` | Game logic, graphics, lighting and sound |
+| `README.md`, `README.de.md` | This guide in English and German |
+| `CHANGELOG.md` | Changes per version (in German) |
+| `.github/workflows/release.yml` | On every push to `main`, builds a release with a ZIP download; on pull requests, only a test ZIP |
 
-Technik: reines JavaScript mit HTML5 Canvas, interne Auflösung 320×180 Pixel bei 16×16-Kacheln. Alle Grafiken und Soundeffekte werden im Code erzeugt (Pixel-Sprites aus Zeichenketten, Töne über die Web Audio API).
+Tech: plain JavaScript with HTML5 Canvas, internal resolution 320×180 pixels with 16×16 tiles. All graphics and sound effects are generated in code (pixel sprites from strings, sounds via the Web Audio API).
 
-## Level bearbeiten
+## Editing levels
 
-Die Level stehen in `level.js` in der Liste `LEVELS`. Jedes Level hat einen Namen, eine Farbwelt (`theme`: `earth`, `crystal`, `fungus` oder `lava`) und Abschnitte, die von links nach rechts aneinandergehängt werden. Jeder Abschnitt hat 12 Zeilen, ein Zeichen entspricht einer Kachel. Zeile 9 ist die normale Laufebene.
+The levels live in `level.js` in the `LEVELS` list. Each level has a name, a color theme (`theme`: `earth`, `crystal`, `fungus` or `lava`) and sections that are joined from left to right. Each section has 12 rows, and one character is one tile. Row 9 is the normal walking level.
 
-| Zeichen | Bedeutung | Zeichen | Bedeutung |
+| Char | Meaning | Char | Meaning |
 |---|---|---|---|
-| `#` | Fels | `B` | Steinziegel |
-| `=` | Holzplanke (von unten durchspringbar) | `%` | Bröckelplatte |
-| `^` | Stacheln | `~` | Lava |
-| `\|` | Holzbalken (Deko) | `.` | Luft |
-| `P` | Startpunkt | `C` | Checkpoint |
-| `E` | Ausgang zum nächsten Level | `T` | Schatztruhe (Spielziel) |
-| `o` | Goldnugget | `*` | Edelstein |
-| `f` | Wandfackel | `v` | Stalaktit |
-| `x` | Leuchtkristall (Deko) | `m` | Leuchtpilz (Deko) |
-| `s` | Spinne | `b` | Fledermaus |
-| `K` | Kristallkäfer | `G` | Sporenpilz |
-| `L` | Glutling (in die Lava setzen) | `S` | Schild (unverwundbar) |
-| `D` | Doppelgold (Gold zählt doppelt) | | |
+| `#` | Rock | `B` | Stone brick |
+| `=` | Wooden plank (can be jumped through from below) | `%` | Crumbling platform |
+| `^` | Spikes | `~` | Lava |
+| `\|` | Wooden beam (decoration) | `.` | Air |
+| `P` | Start point | `C` | Checkpoint |
+| `E` | Exit to the next level | `T` | Treasure chest (goal of the game) |
+| `o` | Gold nugget | `*` | Gem |
+| `f` | Wall torch | `v` | Stalactite |
+| `x` | Glowing crystal (decoration) | `m` | Glowing mushroom (decoration) |
+| `s` | Spider | `b` | Bat |
+| `K` | Crystal beetle | `G` | Spore mushroom |
+| `L` | Ember (place it in the lava) | `S` | Shield (invulnerable) |
+| `D` | Double gold (gold counts double) | | |
 
-Um tiefer in die Höhle zu führen, setzt man einen Abschnitt mit `down(2, [ ... ])` statt `[ ... ]` ein. Dieser Abschnitt und alle folgenden liegen dann 2 Kacheln tiefer. Darüber füllt das Spiel mit Fels auf, darunter mit der letzten Zeile des Abschnitts, sodass Abgründe offen bleiben. Damit man hinunterlaufen kann, sollte der linke Rand des tieferen Abschnitts in den Zeilen 6 und 7 frei sein.
+To lead deeper into the cave, write a section as `down(2, [ ... ])` instead of `[ ... ]`. That section and all following ones then sit 2 tiles lower. The game fills the space above with rock and the space below with the section's last row, so chasms stay open. So that the player can walk down, the left edge of the lower section should be free in rows 6 and 7.
 
-Ein neues Level ist einfach ein weiterer Eintrag in `LEVELS`. Die Reihenfolge in der Liste ist die Spielreihenfolge. Das letzte Level sollte mit der Schatztruhe `T` enden, alle anderen mit einem Ausgang `E`. Die Spielfigur springt etwa 3 Kacheln hoch und 3 bis 4 Kacheln weit. Dafür braucht sie über dem Absprung etwa 4 Kacheln Platz nach oben. Hängt die Decke tiefer, bricht der Sprung früher ab und die Weite sinkt deutlich.
+A new level is simply another entry in `LEVELS`. The order of the list is the order of play. The last level should end with the treasure chest `T`, all others with an exit `E`. The player character jumps about 3 tiles high and 3 to 4 tiles far. For that it needs about 4 tiles of headroom above the take-off point. If the ceiling hangs lower, the jump is cut short and the distance drops noticeably.
 
-### Testen in der Browser-Konsole
+### Testing in the browser console
 
-| Befehl | Wirkung |
+| Command | Effect |
 |---|---|
-| `deepgleam.level(3)` | direkt zu Level 3 springen |
-| `deepgleam.teleport(120, 9)` | an Kachelspalte und -zeile versetzen |
-| `deepgleam.god = true` | keinen Schaden nehmen (Lava und Abgründe bleiben tödlich) |
+| `deepgleam.level(3)` | Jump straight to level 3 |
+| `deepgleam.teleport(120, 9)` | Move to tile column and row |
+| `deepgleam.god = true` | Take no damage (lava and chasms are still deadly) |
 
-## Anpassen
+## Tuning
 
-Spielgefühl und Schwierigkeit lassen sich über die Konstanten am Anfang von `game.js` einstellen:
-`RUN` (Laufgeschwindigkeit), `JUMP_V` (Sprungkraft), `GRAV` (Schwerkraft), `MAX_HP`, `START_LIVES` sowie `SHIELD_TIME` und `DOUBLE_TIME` (Wirkdauer der Spezial-Items in Sekunden).
-Die Farben der Level stehen in `THEMES` in `game.js`.
+Game feel and difficulty can be adjusted with the constants at the top of `game.js`:
+`RUN` (running speed), `JUMP_V` (jump strength), `GRAV` (gravity), `MAX_HP`, `START_LIVES`, plus `SHIELD_TIME` and `DOUBLE_TIME` (how long the special items last, in seconds).
+The level colors are in `THEMES` in `game.js`.
 
-## Änderungen
+## Changes
 
-Was sich in welcher Version geändert hat, steht in [CHANGELOG.md](CHANGELOG.md).
+What changed in which version is listed in [CHANGELOG.md](CHANGELOG.md) (in German).
 
-## Lizenz
+This guide is also available in German: [README.de.md](README.de.md). When making changes, please update both versions.
 
-Veröffentlicht unter der [MIT-Lizenz](LICENSE). Der Code darf frei genutzt, verändert und weitergegeben werden, solange der Copyright-Hinweis erhalten bleibt.
+## License
+
+Released under the [MIT License](LICENSE). You may freely use, modify and share the code as long as the copyright notice is kept.
