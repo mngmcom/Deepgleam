@@ -2,6 +2,14 @@
 
 Die Versionsnummer `v1.0.N` entsteht automatisch aus der Anzahl der Commits auf `main`. Jede Version gibt es als ZIP unter [Releases](https://github.com/mngmcom/Deepgleam/releases).
 
+## v1.0.12
+
+- Alte Stollen: Im Abschnitt „Holzgerüst“ liegen jetzt 6 Goldstücke, vier auf den Planken und zwei über den Lücken.
+
+## v1.0.11
+
+- Die Readme gibt es jetzt auf Englisch (`README.md`) und Deutsch (`README.de.md`).
+
 ## v1.0.10
 
 **8 Level in 4 Höhlenwelten**
