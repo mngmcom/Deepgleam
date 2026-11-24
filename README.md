@@ -54,6 +54,7 @@ The level names are in German, as they appear in the game.
   - **Shield** (blue): invulnerable for 8 seconds. Spikes, spores and stalactites do no damage, and monsters are defeated on contact. The ember becomes harmless but stays undefeatable. Chasms and lava are still deadly.
   - **Double gold** (gold coin with a 2): for 12 seconds every gold nugget is worth 100 points instead of 50.
   - Losing a life also ends the effect. A collected item does not come back.
+- **Extra life** (red heart): levels 4 (Kristallhallen) and 8 (Feuerschlund) each hold a heart that gives you one more life.
 - **Checkpoints** (lanterns on a post) set your respawn point and refill your HP.
 - You lose a life at 0 HP or when you fall into a chasm or the lava.
 - Finishing a level earns 1000 bonus points plus 100 per remaining HP. The treasure chest at the end gives a big bonus.
@@ -91,7 +92,7 @@ The levels live in `level.js` in the `LEVELS` list. Each level has a name, a col
 | `s` | Spider | `b` | Bat |
 | `K` | Crystal beetle | `G` | Spore mushroom |
 | `L` | Ember (place it in the lava) | `S` | Shield (invulnerable) |
-| `D` | Double gold (gold counts double) | | |
+| `D` | Double gold (gold counts double) | `H` | Extra life |
 
 To lead deeper into the cave, write a section as `down(2, [ ... ])` instead of `[ ... ]`. That section and all following ones then sit 2 tiles lower. The game fills the space above with rock and the space below with the section's last row, so chasms stay open. So that the player can walk down, the left edge of the lower section should be free in rows 6 and 7.
 

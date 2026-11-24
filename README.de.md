@@ -52,6 +52,7 @@ Das Spiel hat 8 Level in 4 Höhlenwelten. Jede Welt hat eine eigene Farbwelt und
   - **Schild** (blau): 8 Sekunden unverwundbar. Stacheln, Sporen und Stalaktiten richten keinen Schaden an, Monster werden bei Berührung besiegt. Der Glutling ist harmlos, bleibt aber unbesiegbar. Abgründe und Lava bleiben tödlich.
   - **Doppelgold** (Goldmünze mit 2): 12 Sekunden lang bringt jedes Goldnugget 100 statt 50 Punkte.
   - Wer ein Leben verliert, verliert auch die Wirkung. Ein eingesammeltes Item kommt nicht zurück.
+- **Extra-Leben** (rotes Herz): In Level 4 (Kristallhallen) und Level 8 (Feuerschlund) liegt je ein Herz, das ein zusätzliches Leben gibt.
 - **Checkpoints** (Laternen am Pfahl) speichern den Wiedereinstieg und füllen die HP auf.
 - Bei 0 HP, einem Sturz in den Abgrund oder in die Lava geht ein Leben verloren.
 - Ein abgeschlossenes Level bringt 1000 Bonuspunkte plus 100 je übrigem HP. Die Schatztruhe am Ende bringt einen großen Bonus.
@@ -89,7 +90,7 @@ Die Level stehen in `level.js` in der Liste `LEVELS`. Jedes Level hat einen Name
 | `s` | Spinne | `b` | Fledermaus |
 | `K` | Kristallkäfer | `G` | Sporenpilz |
 | `L` | Glutling (in die Lava setzen) | `S` | Schild (unverwundbar) |
-| `D` | Doppelgold (Gold zählt doppelt) | | |
+| `D` | Doppelgold (Gold zählt doppelt) | `H` | Extra-Leben |
 
 Um tiefer in die Höhle zu führen, setzt man einen Abschnitt mit `down(2, [ ... ])` statt `[ ... ]` ein. Dieser Abschnitt und alle folgenden liegen dann 2 Kacheln tiefer. Darüber füllt das Spiel mit Fels auf, darunter mit der letzten Zeile des Abschnitts, sodass Abgründe offen bleiben. Damit man hinunterlaufen kann, sollte der linke Rand des tieferen Abschnitts in den Zeilen 6 und 7 frei sein.
 

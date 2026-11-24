@@ -2,6 +2,11 @@
 
 Die Versionsnummer `v1.0.N` entsteht automatisch aus der Anzahl der Commits auf `main`. Jede Version gibt es als ZIP unter [Releases](https://github.com/mngmcom/Deepgleam/releases).
 
+## v1.0.13
+
+- Neues Element **Extra-Leben** (`H`, rotes Herz): gibt ein zusätzliches Leben. Je eines liegt in der Mitte von Kristallhallen (auf der Kristallsäule im Kristalldom) und am Anfang von Feuerschlund (gleich hinter dem ersten Lavabecken).
+- Der Levelausgang ist keine Tür mit Holzrahmen mehr, sondern eine unregelmäßige Felsöffnung mit wirbelndem Lichtportal und aufsteigenden Funken. Der Felsrand nimmt die Farben der jeweiligen Höhlenwelt an.
+
 ## v1.0.12
 
 - Alte Stollen: Im Abschnitt „Holzgerüst“ liegen jetzt 6 Goldstücke, vier auf den Planken und zwei über den Lücken.

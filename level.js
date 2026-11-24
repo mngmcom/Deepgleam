@@ -17,6 +17,7 @@
 //   v  Stalaktit (fällt herab)
 //   S  Schild – einige Sekunden unverwundbar, Monster werden bei Berührung besiegt
 //   D  Doppelgold – Goldnuggets zählen einige Sekunden lang doppelt
+//   H  Extra-Leben – gibt ein zusätzliches Leben
 //
 // Monster:
 //   s  Spinne (läuft)           b  Fledermaus (fliegt)
@@ -430,7 +431,7 @@ const LEVELS = [
         "........*.....................",
         ".......BBB....................",
         "...........BB.................",
-        "...............BB.............",
+        "...............BB..H..........",
         "...................BB.........",
         "..x...K............BB....K.x..",
         "##############################",
@@ -835,7 +836,7 @@ const LEVELS = [
         "#..f..........................",
         "#.............o.o.............",
         "#............%%%%.............",
-        "#..P....................s.....",
+        "#..P.................H..s.....",
         "###########~~~~~L~~###########",
         "###########~~~~~~~~###########",
       ],

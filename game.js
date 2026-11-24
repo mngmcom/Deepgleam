@@ -192,6 +192,7 @@
     clear() { [392, 523, 659, 784, 1047].forEach((f, i) => Sound.tone(f, 0.18, { delay: i * 0.1, type: 'triangle', vol: 0.09 })); },
     win() { [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => Sound.tone(f, 0.22, { delay: i * 0.13, type: 'triangle', vol: 0.1 })); },
     drip() { Sound.tone(1400 + Math.random() * 600, 0.08, { type: 'sine', slide: -900, vol: 0.035 }); },
+    life() { [659, 784, 988, 1319, 988, 1319].forEach((f, i) => Sound.tone(f, 0.12, { delay: i * 0.07, type: 'triangle', vol: 0.08 })); },
     power() { [523, 784, 1047, 1568, 2093].forEach((f, i) => Sound.tone(f, 0.1, { delay: i * 0.05, type: 'square', vol: 0.05 })); },
     bubble() { Sound.tone(70 + Math.random() * 40, 0.2, { type: 'sine', slide: 60, vol: 0.05 }); },
   };
@@ -290,6 +291,10 @@
   const DOUBLE_ITEM = sprite(
     ['..yyyyy..', '.yYYYYYy.', 'yYWddYYYy', 'yYYYYdYYy', 'yYYYdYYYy', 'yYYdYYYYy', 'yYYdddYYy', '.yYYYYYy.', '..yyyyy..'],
     { y: '#b8860b', Y: '#ffd040', W: '#fff6c0', d: '#8a5a08' });
+  // Extra-Leben: rotes Herz
+  const LIFE_ITEM = sprite(
+    ['.kk...kk.', 'kRRk.kRRk', 'kRWRkRRRk', 'kRWRRRRrk', 'kRRRRRRrk', '.kRRRRrk.', '..kRRrk..', '...kRk...', '....k....'],
+    { k: '#5a0a14', R: '#ff3a4a', r: '#b81a2a', W: '#ffd0d4' });
   const STAL_ROWS = [
     'aAAAAAAAAa', '.ahAAAAAa.', '.ahAAAAAa.', '..ahAAAa..', '..ahAAAa..', '...hAAa...',
     '...hAAa...', '...hAa....', '....Aa....', '....Aa....', '....a.....', '....a.....',
@@ -533,7 +538,7 @@
     for (let y = 0; y < ROWS; y++)
       for (let x = 0; x < COLS; x++) {
         const ch = grid[y][x];
-        if ('PsbovC*TfEKGLxmSD'.includes(ch)) {
+        if ('PsbovC*TfEKGLxmSDH'.includes(ch)) {
           spawns.push({ ch, tx: x, ty: y });
           grid[y][x] = ch === 'L' ? '~' : '.';
         }
@@ -572,6 +577,7 @@
         case 'C': entities.push({ type: 'cp', x: px + 4, y: py, w: 8, h: 16, active: false }); break;
         case 'S': entities.push({ type: 'shield', x: px + 4, y: py + 4, w: 8, h: 9, t: r * 6 }); break;
         case 'D': entities.push({ type: 'double', x: px + 3, y: py + 4, w: 9, h: 9, t: r * 6 }); break;
+        case 'H': entities.push({ type: 'life', x: px + 3, y: py + 4, w: 9, h: 9, t: r * 6 }); break;
         case 'T': entities.push({ type: 'chest', x: px, y: py + 4, w: 16, h: 12, open: false }); break;
         case 'E': entities.push({ type: 'exit', x: px, y: py - 8, w: 16, h: 24, hb: { x: px + 4, y: py, w: 8, h: 16 } }); break;
         case 'f': entities.push({ type: 'torch', x: px + 8, y: py + 8, w: 0, h: 0 }); break;
@@ -888,6 +894,16 @@
             else { sfx.gem(); burst(e.x + 3, e.y + 3, 10, ['#40c0ff', '#e0ffff']); }
           }
           break;
+        case 'life':
+          e.t += dt;
+          if (state === 'play' && overlap(P, e)) {
+            e.dead = true;
+            lives++;
+            sfx.life();
+            floater(e.x - 12, e.y - 6, '+1 LEBEN!', '#ff6070');
+            burst(e.x + 4, e.y + 4, 16, ['#ff3a4a', '#ffd0d4', '#b81a2a'], { speed: 70, grav: 80 });
+          }
+          break;
         case 'shield':
         case 'double':
           e.t += dt;
@@ -1067,13 +1083,43 @@
     }
   }
 
+  // Ausgang: unregelmäßige Felsöffnung mit wirbelndem Lichtportal (halbe Breite links/rechts je Zeile)
+  const EXIT_L = [1, 3, 4, 5, 6, 6, 7, 7, 7, 8, 8, 8, 8, 8, 8, 7, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5];
+  const EXIT_R = [2, 3, 5, 6, 6, 7, 7, 8, 8, 8, 8, 7, 7, 7, 7, 7, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5];
+  const EXIT_JAG = [1, 2, 1, 0, 1, 2, 1, 0, 1, 1, 2, 1, 0, 1, 2, 1, 1, 0, 1, 2, 1, 0, 1, 1, 2, 1];
+  const EXIT_GLOW = ['#fffbe8', '#fff0c0', '#ffd890', '#f0a858', '#b0603a', '#4a2416'];
   function drawExit(e) {
-    const x = e.x, y = e.y;
-    ctx.fillStyle = '#fff0c0'; ctx.fillRect(x + 3, y + 3, 10, 21);
-    ctx.fillStyle = '#ffd890'; ctx.fillRect(x + 3, y + 3, 10, 4);
-    ctx.fillStyle = '#ffe8b0'; ctx.fillRect(x + 3, y + 7, 10, 3);
-    ctx.fillStyle = '#4a3018'; ctx.fillRect(x, y + 2, 3, 22); ctx.fillRect(x + 13, y + 2, 3, 22); ctx.fillRect(x - 1, y, 18, 3);
-    ctx.fillStyle = '#7a5430'; ctx.fillRect(x + 1, y + 3, 1, 21); ctx.fillRect(x + 14, y + 3, 1, 21); ctx.fillRect(x - 1, y, 18, 1);
+    const y0 = e.y - 2, cx = e.x + 8, R = theme.rock, n = EXIT_L.length;
+    // Felskappe über der Öffnung
+    for (let r = 1; r <= 3; r++) {
+      const w = EXIT_L[0] + EXIT_R[0] + 8 - r * 2;
+      ctx.fillStyle = r === 3 ? R.hl : R.stones[r % 3];
+      ctx.fillRect(cx - EXIT_L[0] - 4 + r, y0 - r, w, 1);
+    }
+    for (let r = 0; r < n; r++) {
+      const l = EXIT_L[r], rr = EXIT_R[r], y = y0 + r;
+      const lw = 3 + EXIT_JAG[r], rw = 3 + EXIT_JAG[(r + 11) % n];
+      // Felsrand: außen hell, innen dunkel
+      ctx.fillStyle = R.stones[(r >> 1) % 3]; ctx.fillRect(cx - l - lw, y, lw, 1); ctx.fillRect(cx + rr, y, rw, 1);
+      ctx.fillStyle = R.hl; ctx.fillRect(cx - l - lw, y, 1, 1);
+      ctx.fillStyle = R.sh; ctx.fillRect(cx + rr + rw - 1, y, 1, 1);
+      // Portal: dunkler Tunnelrand, zur Mitte hin wirbelndes Licht
+      for (let c = -l; c < rr; c++) {
+        const dx = (c + 0.5) / 8, dy = (r - 13) / 12;
+        const d = Math.hypot(dx, dy);
+        const swirl = Math.sin(Math.atan2(dy, dx) * 3 + d * 10 - time * 3);
+        const i = Math.max(0, Math.min(5, Math.floor((d + swirl * 0.1) * 6)));
+        ctx.fillStyle = EXIT_GLOW[i];
+        ctx.fillRect(cx + c, y, 1, 1);
+      }
+      ctx.fillStyle = R.sh; ctx.fillRect(cx - l, y, 1, 1);
+    }
+    // aufsteigende Lichtfunken
+    ctx.fillStyle = '#ffffff';
+    for (let i = 0; i < 4; i++) {
+      const ph = (time * 0.5 + i * 0.25) % 1;
+      ctx.fillRect(Math.round(cx - 0.5 + Math.sin(i * 2.3 + time * 2) * 3.5), Math.round(y0 + 22 - ph * 16), 1, 1);
+    }
   }
 
   function drawCheckpoint(e) {
@@ -1201,6 +1247,7 @@
         case 'gold': add(e.x + 3, e.y + 2, 9, 0.5); break;
         case 'shield': add(e.x + 4, e.y + 4, 22 + Math.sin(time * 4) * 2, 0.8, '90,200,255', 0.1); break;
         case 'double': add(e.x + 4, e.y + 4, 22 + Math.sin(time * 4) * 2, 0.8, '255,200,60', 0.1); break;
+        case 'life': add(e.x + 4, e.y + 4, 22 + Math.sin(time * 4) * 2, 0.8, '255,70,90', 0.1); break;
         case 'chest': add(e.x + 8, e.y + 4, e.open ? 70 : 34, 0.9, '255,200,60', e.open ? 0.09 : 0.06); break;
         case 'exit': add(e.x + 8, e.y + 14, 56, 1, '255,230,170', 0.06); break;
         case 'crystal': add(e.x + 8, e.y + 10, 26 + Math.sin(time * 2 + e.v * 9) * 2, 0.75, '90,170,255', 0.07); break;
@@ -1251,6 +1298,7 @@
       case 'gem': ctx.drawImage(GEM, x, Math.round(e.y + Math.sin(e.t * 3) * 1.5)); break;
       case 'shield': ctx.drawImage(SHIELD_ITEM, x, Math.round(e.y + Math.sin(e.t * 3) * 1.5)); break;
       case 'double': ctx.drawImage(DOUBLE_ITEM, x, Math.round(e.y + Math.sin(e.t * 3) * 1.5)); break;
+      case 'life': ctx.drawImage(LIFE_ITEM, x, Math.round(e.y + Math.sin(e.t * 3) * 1.5)); break;
       case 'stal': ctx.drawImage(STAL, x + (e.state === 1 ? Math.round((Math.random() - 0.5) * 2) : 0), y); break;
       case 'spider': { const f = SPIDER[Math.floor(e.t * 8) % 2]; ctx.drawImage(f.r, x, y); pushEyes(f.eyesR); break; }
       case 'bat': { const f = BAT[Math.floor(e.t * 8) % 2]; ctx.drawImage(f.r, x, y); pushEyes(f.eyesR); break; }
